@@ -115,10 +115,9 @@ public class CoinServiceTests {
         coinService.transferCoins(fromUser, toUser, -9);
     }
 
-    @Test
+    @Test(expected = IllegalStateException.class)
     public void getCoinsOfNotExistUserTest() {
         int coins = coinService.getCoinsOf(new BigInteger("1024"));
-        Assert.assertEquals(0, coins);
     }
 
     @Transactional

@@ -18,14 +18,10 @@ import java.lang.management.ManagementFactory;
 @Controller
 public class OpsController {
 
-    private final String WATCHED_PID = gettPid();
-
-    private final String jstackCmd[] = {"jstack", "-l", WATCHED_PID};
+    private static String[] jstackCmd = null;
 
     @RequestMapping(value = "/")
     public String welcome(ModelAndView modelAndView) {
-        String message = "";
-        modelAndView.addObject("message", message);
         return "index";
     }
 
@@ -33,7 +29,9 @@ public class OpsController {
             value = "/ops/jstack")
     public @ResponseBody String printJStack()
             throws IOException, InterruptedException {
-
+        if (jstackCmd == null) {
+            setJStackCmd();
+        }
         StringBuffer jstackOut = new StringBuffer();
 
         Process jstackProcess = Runtime.getRuntime().exec(jstackCmd);
@@ -49,10 +47,15 @@ public class OpsController {
         return jstackOut.toString();
     }
 
-    private static String gettPid() {
+    private static String setJStackCmd() {
         final String url = "http://localhost:8080/getpid";
         RestTemplate restTemplate = new RestTemplate();
         String pid = restTemplate.getForObject(url, String.class);
+
+        jstackCmd = new String[3];
+        jstackCmd[0] = "jstack";
+        jstackCmd[1] = "-l";
+        jstackCmd[2] = pid;
         return pid;
     }
 }

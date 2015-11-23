@@ -21,7 +21,7 @@ public class AutoTellerController {
     public @ResponseBody ApiResult depositCoins(
                        @RequestParam("user_id") BigInteger userId,
                        @RequestParam("coins") int coins) {
-        ApiResult result = ApiResult.ILLEGAL_ARGS;
+        ApiResult result = ApiResult.illegalArgResult();
         if ((userId.compareTo(BigInteger.ZERO) <= 0) || coins <= 0) {
             result.appendMessage("user_id and coins both should be greater" +
                     " than 0, receive " + userId + " " + String.valueOf(coins));
@@ -30,7 +30,7 @@ public class AutoTellerController {
 
 
         coinService.depositCoin(userId, coins);
-        result = ApiResult.SUCCESS;
+        result = ApiResult.successResult();
         result.appendMessage(String.format("add %d coins for %d", coins, userId));
         return result;
     }
@@ -41,7 +41,7 @@ public class AutoTellerController {
                 @RequestParam("from_user_id") BigInteger fromUser,
                 @RequestParam("to_user_id") BigInteger toUser,
                 @RequestParam("coins") int coins) {
-        ApiResult result = ApiResult.ILLEGAL_ARGS;
+        ApiResult result = ApiResult.illegalArgResult();
         if ((fromUser.compareTo(BigInteger.ZERO) <= 0)
               || (toUser.compareTo(BigInteger.ZERO) <= 0)
               || coins <= 0) {
@@ -53,7 +53,7 @@ public class AutoTellerController {
 
         try {
             coinService.transferCoins(fromUser, toUser, coins);
-            result = ApiResult.SUCCESS;
+            result = ApiResult.successResult();
             result.appendMessage(String.format("transfer %d coins from %d to %d",
                     coins, fromUser, toUser));
             return result;
@@ -68,16 +68,20 @@ public class AutoTellerController {
     @RequestMapping(method = RequestMethod.GET,
         value = "/coins/user/{userId}")
     public @ResponseBody ApiResult getCoinsOf(@PathVariable BigInteger userId) {
-        ApiResult result = ApiResult.ILLEGAL_ARGS;
+        ApiResult result = ApiResult.illegalArgResult();
         if (userId.compareTo(BigInteger.ZERO) <= 0) {
-            result.appendMessage("user_id should be greater than 0, " +
-                    "receive " + userId);
+            result = ApiResult.illegalArgResult("user_id should be greater than 0, " +
+                        "receive " + userId);
             return result;
         }
 
-        Integer coins = coinService.getCoinsOf(userId);
-        result = ApiResult.SUCCESS;
-        result.setData(coins);
+        try {
+            Integer coins = coinService.getCoinsOf(userId);
+            result = ApiResult.successResult();
+            result.setData(coins);
+        } catch (IllegalStateException e) {
+            result.appendMessage(e.getLocalizedMessage());
+        }
 
         return result;
     }

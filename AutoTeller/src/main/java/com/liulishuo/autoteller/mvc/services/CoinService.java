@@ -33,7 +33,7 @@ public class CoinService {
 
     public void depositCoin(BigInteger userId, int addCoins) {
         if (addCoins <= 0) {
-            throw new IllegalArgumentException("expect addCoins >= 0, " +
+            throw new IllegalArgumentException("expect addCoins > 0, " +
                     "but receive addCoins:"+ String.valueOf(addCoins));
         }
 
@@ -49,8 +49,9 @@ public class CoinService {
         UserAccount userAccount = coinsDAO.getUserAccount(userId);
         if (null != userAccount) {
             return userAccount.getCoins();
+        } else {
+            throw new IllegalStateException("The user " + userId + " is not exist");
         }
-        return 0;
     }
 
 
@@ -69,15 +70,18 @@ public class CoinService {
             coinsDAO.depositCoin(fromUser, -coins);
             coinsDAO.depositCoin(toUser, coins);
             transactionMgr.commit(status);
+            transferLogDAO.logTransaction(fromUser, toUser, coins);
         } catch (Exception e) {
             transactionMgr.rollback(status);
             logger.error("transaction failed in transferCoins:"
                     + fromUser + "|" + toUser + "|" + String.valueOf(coins));
             throw e;
         }
-
-
         return true;
+    }
+
+    public void createUser(BigInteger userId) {
+        coinsDAO.createUser(userId, 0);
     }
 
     private boolean hasEnoughCoins(BigInteger userId, long coins) {

@@ -12,3 +12,5 @@ CREATE TABLE transfer_log (
   to_user bigint  NOT NULL ,
   coins integer NOT NULL
 );
+
+INSERT INTO user_coins(id, user_id, coins) VALUES (1, 1, 10);

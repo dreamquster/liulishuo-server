@@ -12,7 +12,7 @@ public interface TransferLogDAO {
     static final String table = "transfer_log";
 
     @Insert("INSERT INTO " + table + "(from_user, to_user, coins) " +
-            "VALUES(#{fromUser}, #{toUser}, #{coins}")
+            "VALUES(#{fromUser}, #{toUser}, #{coins})")
     public void logTransaction(@Param("fromUser") BigInteger fromUser,
                                @Param("toUser") BigInteger toUser,
                                @Param("coins") int coins);

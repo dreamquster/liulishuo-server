@@ -11,9 +11,25 @@ public class ApiResult {
 
     private Object data;
 
-    public static ApiResult ILLEGAL_ARGS = new ApiResult(-1, "Illegal Argument:");
+    public static ApiResult illegalArgResult() {
+        return illegalArgResult("");
+    }
 
-    public static ApiResult SUCCESS = new ApiResult(0, "Success:");
+    public static ApiResult illegalArgResult(String message) {
+        return new ApiResult(ILLEGAL_ARGS, "Illegal Argument:" + message);
+    }
+
+    public static ApiResult successResult() {
+        return  successResult("");
+    }
+
+    public static ApiResult successResult(String message) {
+        return new ApiResult(SUCCESS, "Success:" + message);
+    }
+
+    public static final int SUCCESS = 0;
+
+    public static final int ILLEGAL_ARGS = -1;
 
     public static final int USER_ERR_START = -2048;
 

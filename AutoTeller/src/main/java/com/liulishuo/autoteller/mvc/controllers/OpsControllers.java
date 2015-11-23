@@ -15,6 +15,11 @@ public class OpsControllers {
 
     private static String CURRENT_PID = getPid();
 
+    @RequestMapping(value = "/")
+    public String welcome() {
+        return "index";
+    }
+
     @RequestMapping(value = "/getpid")
     public @ResponseBody String echoPid() {
         return CURRENT_PID;

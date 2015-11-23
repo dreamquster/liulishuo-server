@@ -17,3 +17,6 @@ hs_err_pid*
 
 #mvn generated directory
 target
+
+*.pid
+*.out

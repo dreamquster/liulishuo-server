@@ -60,6 +60,10 @@ public class AppTests {
                 .andExpect(jsonPath("$.message",
                         is("Illegal Argument:user_id and coins both " +
                                 "should be greater than 0, receive -4 10")));
+
+        mockMvc.perform(post("/user/add?user_id=4&coins=-10"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status", is(ApiResult.ILLEGAL_ARGS)));
     }
 
     @Test
@@ -100,4 +104,38 @@ public class AppTests {
                         is("Success:transfer 5 coins from 1 to 4")));
     }
 
+
+    @Transactional
+    @Test
+    public void transferCoinsToWrongUserTest() throws Exception {
+        mockMvc.perform(post("/transaction/transfer?from_user_id=1&" +
+                "to_user_id=4&coins=5"))
+                .andExpect(jsonPath("$.status", is(ApiResult.TRANSACTION_FAILED)))
+                .andExpect(jsonPath("$.message", is("failed to transfer " +
+                        "coins from 1 to 4 with error:The user 4 is not exist")));
+    }
+
+    @Test
+    public void transferIllegalArgTest() throws Exception{
+        mockMvc.perform(post("/transaction/transfer?from_user_id=1&" +
+                "to_user_id=4&coins=-5"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status", is(ApiResult.ILLEGAL_ARGS)));
+        mockMvc.perform(post("/transaction/transfer?from_user_id=1&" +
+                "to_user_id=-4&coins=5"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status", is(ApiResult.ILLEGAL_ARGS)));
+        mockMvc.perform(post("/transaction/transfer?from_user_id=-1&" +
+                "to_user_id=4&coins=-5"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status", is(ApiResult.ILLEGAL_ARGS)));
+    }
+
+    @Test
+    public void statusUrlTest() throws Exception {
+        mockMvc.perform(get("/ok"))
+                .andExpect(status().isOk());
+        mockMvc.perform(get("/getpid"))
+                .andExpect(status().isOk());
+    }
 }

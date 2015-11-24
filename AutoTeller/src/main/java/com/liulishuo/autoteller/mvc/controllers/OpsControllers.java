@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.lang.management.ManagementFactory;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * Created by Administrator on 2015/11/23 0023.
@@ -16,7 +18,7 @@ public class OpsControllers {
     private static String CURRENT_PID = getPid();
 
     @RequestMapping(value = "/")
-    public String welcome() {
+    public String welcome(Map<String,Object> model) {
         return "index";
     }
 

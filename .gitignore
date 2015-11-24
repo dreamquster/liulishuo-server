@@ -20,3 +20,6 @@ target
 
 *.pid
 *.out
+./libs/
+liulishuo.tgz
+/liulishuo

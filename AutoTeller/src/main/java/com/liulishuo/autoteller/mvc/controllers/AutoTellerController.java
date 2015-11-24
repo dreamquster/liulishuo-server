@@ -48,6 +48,7 @@ public class AutoTellerController {
             result.appendMessage("from _user_id,to_user_id and coins " +
                     "both should be greater than 0, receive "
                     + fromUser + " " + toUser + " " + String.valueOf(coins));
+            return result;
         }
 
 

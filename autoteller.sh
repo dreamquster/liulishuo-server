@@ -22,7 +22,7 @@ start_with_mvn_tomcat() {
 	cur_dir=`pwd`
 	
 	cd $mvn_proj_dir
-	nohup mvn tomcat7:run > ./$name.out 2>&1 &
+	nohup java -jar libs/$2.jar > ./$name.out 2>&1 &
 	echo $! > ./$name.pid
 	echo "sucess start "$2
 	cd $cur_dir
@@ -62,18 +62,18 @@ main() {
 	case $key in
 		"start")
 			echo "start liulishuo app"
-			start_with_mvn_tomcat $SH_FILE_DIR/AutoTeller autoteller
-			start_with_mvn_tomcat $SH_FILE_DIR/OpsMonitor opsmonitor
+			start_with_mvn_tomcat $SH_FILE_DIR AutoTeller
+			start_with_mvn_tomcat $SH_FILE_DIR OpsMonitor
 			;;
 		"stop")
 			echo "stop liulishuo app"
-			stop_tomcat $SH_FILE_DIR/AutoTeller autoteller
-			stop_tomcat $SH_FILE_DIR/OpsMonitor opsmonitor
+			stop_tomcat $SH_FILE_DIR AutoTeller
+			stop_tomcat $SH_FILE_DIR OpsMonitor
 			;;
 		"restart")
 			echo "restart app"
-			restart_proj $SH_FILE_DIR/AutoTeller autoteller
-			restart_proj $SH_FILE_DIR/OpsMonitor opsmonitor
+			restart_proj $SH_FILE_DIR AutoTeller
+			restart_proj $SH_FILE_DIR opsmonitor
 			;;
 		"status")
 			echo "test whether webapp which is listen on 8080 is ok"

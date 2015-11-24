@@ -37,18 +37,13 @@
 
 
     <bean id="jsonConvertor"
-          class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"/>
+          class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
         <property name="messageConverters">
             <list>
                 <ref bean="jsonConvertor"/>
             </list>
         </property>
-    </bean>
-
-    <bean id="jspResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="prefix" value="/WEB-INF/pages/"/>
-        <property name="suffix" value=".jsp"/>
     </bean>
 
 </beans>

@@ -61,6 +61,9 @@ public class CoinService {
             throw new IllegalArgumentException(fromUser + " can not provide "
                     + String.valueOf(coins) + " coins!");
         }
+        if (null == coinsDAO.getUserAccount(toUser)) {
+            throw new IllegalStateException("The user " + toUser + " is not exist");
+        }
 
         logger.info(fromUser + " transfer " + String.valueOf(coins) + " coins to"
                + toUser);
@@ -91,6 +94,7 @@ public class CoinService {
         }
         return false;
     }
+
     public void setCoinsDAO(CoinsDAO coinsDAO) {
         this.coinsDAO = coinsDAO;
     }

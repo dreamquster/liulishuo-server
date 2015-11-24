@@ -2,6 +2,9 @@ package com.liulishuo.autoteller.mvc.controllers;
 
 import com.liulishuo.autoteller.mvc.models.ApiResult;
 import com.liulishuo.autoteller.mvc.services.CoinService;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +16,8 @@ import java.math.BigInteger;
  */
 @Controller
 public class AutoTellerController {
+
+    Logger logger = LoggerFactory.getLogger(AutoTellerController.class);
 
     @Autowired
     private CoinService coinService;
@@ -51,6 +56,10 @@ public class AutoTellerController {
             return result;
         }
 
+        if (logger.isDebugEnabled()) {
+            logger.debug("transferCoins:" + fromUser + "|" + toUser + "|" +
+                String.valueOf(coins));
+        }
 
         try {
             coinService.transferCoins(fromUser, toUser, coins);

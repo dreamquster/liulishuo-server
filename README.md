@@ -5,6 +5,7 @@
 
 用mysql -uroot登录vagrant中的MySQL
 数据库用use coins
+/AutoTeller/src/main/bin/init_mysqldb.sql建表sql
 
 ####打包
 ```shell

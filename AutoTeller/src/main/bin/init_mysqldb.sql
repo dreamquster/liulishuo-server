@@ -15,6 +15,8 @@ CREATE TABLE transfer_log (
   PRIMARY KEY(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE INDEX user_idx ON  user_coins(user_id);
 CREATE USER 'liulishuo'@'%' IDENTIFIED BY 'LLS2015119';
 GRANT ALL PRIVILEGES ON coins.* TO 'liulishuo'@'%';
+
 
